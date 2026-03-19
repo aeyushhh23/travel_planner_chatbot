@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Planner | Your AI-Powered Trip Assistant</title>
+    <meta name="description" content="Plan your perfect trip with our AI-powered travel assistant. Get personalized recommendations for destinations, food, and culture.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chat-container {
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .chat-message.ai {
+            background-color: #f3f4f6;
+            border-radius: 18px 18px 18px 4px;
+        }
+        .chat-message.user {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+        .typing-indicator span {
+            animation: bounce 1.5s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-globe text-blue-600 text-2xl"></i>
+                        <span class="ml-2 font-bold text-gray-800 text-xl">Travel Planner</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-800 hover:text-blue-600">Destinations</a>
+                    <a href="#" class="text-gray-800 hover:text-blue-600">Itineraries</a>
+                    <a href="#" class="text-gray-800 hover:text-blue-600">Travel Tips</a>
+                    <a href="#" class="text-gray-800 hover:text-blue-600">Budget Planning</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white pb-4 px-4">
+            <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Destinations</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Itineraries</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Travel Tips</a>
+            <a href="#" class="block py-2 text-gray-800 hover:text-blue-600">Budget Planning</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Plan Your Perfect Trip</h1>
+                    <p class="text-xl mb-8">Get personalized recommendations for your next adventure with our AI-powered travel assistant.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#chatbot" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition duration-300 text-center">Ask the Chatbot</a>
+                        <a href="#" class="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-blue-600 transition duration-300 text-center">Browse Destinations</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="World travel" class="rounded-lg shadow-2xl max-w-md w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Why Use Our Travel Planner?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-robot text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI-Powered Recommendations</h3>
+                    <p class="text-gray-600">Get personalized suggestions based on your interests, budget, and travel style.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-map-marked-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Custom Itineraries</h3>
+                    <p class="text-gray-600">Receive day-by-day plans tailored to your preferences and time constraints.</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-lightbulb text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Local Insights</h3>
+                    <p class="text-gray-600">Learn about local customs, hidden gems, and must-try experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Destinations -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Popular Destinations</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="relative overflow-hidden rounded-lg shadow-md group">
+                    <img src="https://images.unsplash.com/photo-1503917988258-f87a78e3c995?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Paris" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                        <h3 class="text-white font-bold text-xl">Paris</h3>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-lg shadow-md group">
+                    <img src="https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Bali" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                        <h3 class="text-white font-bold text-xl">Bali</h3>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-lg shadow-md group">
+                    <img src="https://images.unsplash.com/photo-1538970272646-f61fabb3bfdf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="New York" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                        <h3 class="text-white font-bold text-xl">New York</h3>
+                    </div>
+                </div>
+                <div class="relative overflow-hidden rounded-lg shadow-md group">
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Tokyo" class="w-full h-48 object-cover transition duration-500 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-4">
+                        <h3 class="text-white font-bold text-xl">Tokyo</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chatbot Section -->
+    <section id="chatbot" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Travel Assistant</h2>
+            <div class="flex flex-col lg:flex-row gap-8">
+                <div class="lg:w-1/2">
+                    <div class="chat-container bg-white rounded-xl border border-gray-200 overflow-hidden max-w-2xl mx-auto">
+                        <div class="bg-blue-600 text-white p-4 flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center mr-3">
+                                <i class="fas fa-robot text-blue-600"></i>
+                            </div>
+                            <h3 class="font-semibold">Travel AI Assistant</h3>
+                            <button id="minimize-chat" class="ml-auto focus:outline-none">
+                                <i class="fas fa-minus text-white"></i>
+                            </button>
+                        </div>
+                        <div id="chat-messages" class="h-96 overflow-y-auto p-4 space-y-4">
+                            <div class="chat-message ai fade-in">
+                                <div class="p-3">
+                                    <p>Hello! I'm your Travel Assistant. How can I help you plan your trip today? Here are some things I can help with:</p>
+                                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                                        <li>Creating personalized itineraries</li>
+                                        <li>Recommending destinations</li>
+                                        <li>Suggesting local foods to try</li>
+                                        <li>Providing cultural tips</li>
+                                        <li>Helping with transportation advice</li>
+                                    </ul>
+                                    <p class="mt-2">Where would you like to go?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border-t border-gray-200 p-4 bg-gray-50">
+                            <div class="flex">
+                                <input id="user-input" type="text" placeholder="Ask me anything about travel..." class="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <button id="send-button" class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 transition duration-300">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div id="typing-indicator" class="typing-indicator hidden mt-2 text-gray-500 text-sm">
+                                <span>AI is typing</span>
+                                <span class="ml-1">.</span>
+                                <span class="ml-1">.</span>
+                                <span class="ml-1">.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-md h-full">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-800">Try These Questions:</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "Plan a 7-day European trip for first-time visitors"
+                            </button>
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "Best beaches in Southeast Asia for families"
+                            </button>
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "Affordable honeymoon destinations in August"
+                            </button>
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "How to pack light for a 2-week trip"
+                            </button>
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "Must-try foods in Italy"
+                            </button>
+                            <button class="suggested-question bg-white border border-gray-200 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition duration-300">
+                                "Travel safety tips for solo female travelers"
+                            </button>
+                        </div>
+                        <div class="mt-6">
+                            <h4 class="font-medium mb-2 text-gray-800">Travel Tips:</h4>
+                            <ul class="space-y-2 text-gray-600">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-blue-600 mt-1 mr-2"></i>
+                                    <span>Always check visa requirements before booking flights</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-blue-600 mt-1 mr-2"></i>
+                                    <span>Purchase travel insurance for international trips</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-blue-600 mt-1 mr-2"></i>
+                                    <span>Learn basic phrases in the local language</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check-circle text-blue-600 mt-1 mr-2"></i>
+                                    <span>Notify your bank about international travel</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-blue-600 text-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Travelers Love Our Planner</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Sarah K.</h4>
+                            <div class="flex text-yellow-300">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"The AI assistant helped me discover amazing places in Europe that weren't in any guidebooks. Our trip was perfectly balanced between famous sights and local secrets."</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Michael T.</h4>
+                            <div class="flex text-yellow-300">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"As a solo traveler, I was nervous about my South America trip, but the transportation advice from this planner was spot-on. The budget tips saved me so much money!"</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Aisha &amp; Raj</h4>
+                            <div class="flex text-yellow-300">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"The food recommendations for our Italy trip were incredible! We tried everything from high-end restaurants to street food, and the cultural tips helped us dine with confidence."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gray-800 text-white">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to Plan Your Next Adventure?</h2>
+            <p class="text-xl mb-8">Start chatting with our AI assistant now to create your perfect itinerary.</p>
+            <a href="#chatbot" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-300 inline-block">Ask the Travel AI</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Travel Planner</h3>
+                    <p class="text-gray-400">Your AI-powered guide to discovering the world.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Destinations</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Itineraries</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Travel Tips</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Packing Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Seasonal Travel</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Language Basics</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cultural Etiquette</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-2"></i>
+                            <span>help@travelplanner.ai</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-globe mt-1 mr-2"></i>
+                            <span>Available worldwide</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 Travel Planner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chat Button -->
+    <button id="floating-chat-button" class="fixed bottom-6 right-6 bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition duration-300 z-50">
+        <i class="fas fa-comment-alt text-xl"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
